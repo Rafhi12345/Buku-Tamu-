@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buku Tamu Dinas Pendidikan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <style>
+     body{
+    background-image: url('tgu1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height:100vh;
+}
+    </style>
+  </head>
+  <body class="py-8 px-4 flex justify-center">
+    <div class="w-full max-w-md">
+      <div class="bg-white rounded-t-xl p-4 text-center shadow-md mb-2">
+        <div class="flex justify-center gap-4 mb-3">
+          <div>
+           <img src="bgr5.png" alt="bgr" width="100">
+            
+          </div>
+          <div>
+            <img src="disdik.jpg" alt="dis" width="70">
+          </div>
+        </div>
+        <h1 class="text-sm font-bold text-gray-800 uppercase leading-tight">
+          Buku Tamu Bidang Sarpras<br />Dinas Pendidikan Kota Bogor
+        </h1>
+      </div>
+
+      <div class="bg-white rounded-b-xl shadow-lg p-6">
+        <form action="proses_simpan.php" method="POST" id="guestForm">
+          <div class="mb-6">
+            <h2
+              class="text-blue-700 font-bold text-lg border-b-2 border-blue-700 pb-2 mb-4"
+            >
+              Informasi Pribadi
+            </h2>
+
+            <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-800 mb-1"
+                >Nama: <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                name="nama"
+                placeholder="Masukkan nama lengkap"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                required
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-800 mb-1"
+                >Instansi/Perusahaan: <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                name="instansi"
+                placeholder="Masukkan nama instansi atau lembaga"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                required
+              />
+            </div>
+          </div>
+
+          <hr class="border-gray-100 my-6" />
+
+          <div class="mb-6">
+            <h2
+              class="text-blue-700 font-bold text-lg border-b-2 border-blue-700 pb-2 mb-4"
+            >
+              Tujuan dan Keperluan
+            </h2>
+
+            <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-800 mb-1"
+                >Tujuan: <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                name="tujuan"
+                placeholder="Contoh: Menemui Pak Anu"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                required
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-800 mb-1"
+                >Keterangan:</label
+              >
+              <textarea
+                name="keterangan"
+                rows="3"
+                placeholder="Masukkan keterangan tambahan jika ada"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:border-blue-500"
+              ></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-semibold text-gray-800 mb-1"
+                >Tanda Tangan: <span class="text-red-500">*</span></label
+              >
+              <div
+                class="border border-gray-300 rounded-lg bg-gray-50 relative overflow-hidden"
+              >
+                <canvas
+                  id="signature-pad"
+                  class="w-full h-40 border-b border-gray-200 bg-white"
+                ></canvas>
+                <div class="p-2 flex justify-end">
+                  <button
+                    type="button"
+                    id="clear-btn"
+                    class="text-xs bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                  >
+                    Hapus Ulang
+                  </button>
+                </div>
+              </div>
+              <input
+                type="hidden"
+                name="tanda_tangan"
+                id="tanda_tangan_input"
+                required
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-[#198754] hover:bg-green-700 text-white font-bold py-3 rounded-lg mt-2 transition duration-200"
+          >
+            Kirim
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Inisialisasi Canvas Tanda Tangan
+      const canvas = document.getElementById("signature-pad");
+      const signaturePad = new SignaturePad(canvas, {
+        backgroundColor: "rgb(255, 255, 255)",
+      });
+
+      function resizeCanvas() {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        if (
+          canvas.width !== canvas.offsetWidth * ratio ||
+          canvas.height !== canvas.offsetHeight * ratio
+        ) {
+          canvas.width = canvas.offsetWidth * ratio;
+          canvas.height = canvas.offsetHeight * ratio;
+          canvas.getContext("2d").scale(ratio, ratio);
+          signaturePad.clear();
+        }
+      }
+
+      window.onresize = resizeCanvas;
+      resizeCanvas();
+
+      // Tombol Hapus Ulang Tanda Tangan
+      document.getElementById("clear-btn").addEventListener("click", () => {
+        signaturePad.clear();
+      });
+
+      // Saat Form dikirim (Submit), ubah gambar tanda tangan jadi Teks Base64
+      document
+        .getElementById("guestForm")
+        .addEventListener("submit", function (e) {
+          if (signaturePad.isEmpty()) {
+            alert("Silakan isi tanda tangan Anda terlebih dahulu!");
+            e.preventDefault(); // Batalkan pengiriman form jika belum tanda tangan
+          } else {
+            // Ambil data gambar dalam format teks Base64
+            const dataUrl = signaturePad.toDataURL();
+            // Masukkan teks tersebut ke dalam input hidden agar ikut terkirim ke PHP
+            document.getElementById("tanda_tangan_input").value = dataUrl;
+          }
+        });
+    </script>
+  </body>
+</html>
